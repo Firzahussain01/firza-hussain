@@ -1,0 +1,45 @@
+package main
+
+import (
+	"fmt"
+)
+
+type User struct {
+	Name string
+	Age  int
+	City string
+}
+
+func FunctionName(user User) string {
+	//fmt.Println("Name: ", user.Name)
+	return user.Name
+
+}
+func FunctionName1(user User) string {
+
+	//fmt.Println("City: ", user.City)
+	return user.City
+}
+
+func FunctionName2(user User) int {
+	//fmt.Println("Age: ", user.Age)
+	return user.Age
+
+}
+
+func main() {
+	user := User{
+		Name: "John",
+		Age:  18,
+		City: "LosAngeles",
+	}
+
+	name := FunctionName(user)
+	age := FunctionName2(user)
+	City := FunctionName1(user)
+	// Output: John
+
+	fmt.Println(name)
+	fmt.Println(age)
+	fmt.Println(City)
+}
