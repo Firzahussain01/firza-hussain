@@ -1,0 +1,39 @@
+package main
+
+import (
+	"fmt"
+)
+
+type employee struct {
+	name     string
+	salary   int
+	position string
+}
+
+type company struct {
+	companyName string
+	employees   []employee
+}
+
+func main() {
+
+	employees1 :=
+		employee{"faraz", 1233, "Developer"}
+	employees2 :=
+		employee{"asad", 1773, "coder"}
+	employees3 :=
+		employee{"daud", 3245, "third"}
+
+	fmt.Printf("The entries of the employee details are:\n %v\n", employees1)
+	fmt.Printf(" %v\n", employees2)
+	fmt.Printf(" %v\n", employees3)
+
+	employees := []employee{employees1, employees2, employees3}
+	fmt.Printf("%v", employees)
+
+	Telenor := company{"Tetra", employees}
+
+	fmt.Printf("\n\nThe Company Name: %v\n", Telenor.companyName)
+	fmt.Printf("The Employees Details: %v", Telenor.employees)
+
+}
