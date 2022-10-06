@@ -1,0 +1,85 @@
+package main
+
+import (
+	"crypto/sha256"
+	"fmt"
+	"strconv"
+	"strings"
+)
+
+type block struct {
+	transaction  string
+	nonce        int
+	previousHash string
+	currentHash  string
+}
+
+func NewBlock(transaction string, nonce int, previousHash string) *block {
+	b := new(block)
+	b.transaction = transaction
+	b.nonce = nonce
+	b.previousHash = previousHash
+	return b
+}
+
+type BlockChain struct {
+	list []*block
+}
+
+func (ls *BlockChain) CreateBlock(transaction string, nonce int, previousHash string) *block {
+	st := NewBlock(transaction, nonce, previousHash)
+	ls.list = append(ls.list, st)
+	return st
+}
+
+func (li *BlockChain) Print() {
+	no := 0
+	max := len((li.list))
+	for no < max {
+		fmt.Println(strings.Repeat("=", 25), " List  ", no, strings.Repeat("=", 25), "\n Block transaction:", li.list[no].transaction, "\nBlock nonce  ", li.list[no].nonce)
+		fmt.Println("Block previousHash: ", li.list[no].previousHash)
+		str := strconv.Itoa(li.list[no].nonce)
+		str = li.list[no].transaction + str + li.list[no].previousHash
+		li.list[no].previousHash = CalculateHash(str)
+		no++
+	}
+}
+
+func CalculateHash(stringToHash string) string {
+	fmt.Println("String Recieved: ", stringToHash)
+	return fmt.Sprintf(" \nHash value of given string: %x", sha256.Sum256([]byte(stringToHash)))
+
+}
+
+func (ls *BlockChain) ChangeBlock(blockNo int, trans string) {
+	ls.list[blockNo].transaction = trans
+	n := ls.list[blockNo].nonce
+	ls.CreateBlock(trans, n, "")
+}
+
+func (li *BlockChain) VerifyChain() {
+	// Verify that chain is not tampered by checking the currenthash of each block with previoushash
+	for i := 0; i < len(li.list); i++ {
+		if i == 0 {
+			continue
+		}
+		if li.list[i].previousHash != li.list[i-1].currentHash {
+			fmt.Println("Chain is tampered")
+			return
+		} else {
+			fmt.Println("Chain is not tampered")
+		}
+	}
+}
+
+func main() {
+	block := new(BlockChain)
+	block.CreateBlock("alice_to_bob", 7, "asd")
+	block.CreateBlock("bob_to_alice", 6, "sss")
+	//call functions
+	block.Print()
+	block.ChangeBlock(1, "charlie_to_alice")
+	block.Print()
+	block.VerifyChain()
+
+}
